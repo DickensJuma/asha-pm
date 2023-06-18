@@ -1,14 +1,34 @@
 import { Request, Response } from 'express';
-import jwt from 'jsonwebtoken';
 import User from '../models/user';
 import UserService from '../services/userService';
 
-// POST /register
+
+/** @swagger
+  * /api/v1/users/register:
+  *   post:
+  *     tags:
+  *       - Users
+  *     description: Register User
+  *     operationId: registerUser
+  *     summary: Register User
+  *     requestBody:
+  *       content:
+  *         application/json:
+  *           schema:
+  *             type: object
+  *             example: { "first_name":"John",  "last_name":"Doe", "email":"test@gmail.com","role": "user", "password": "test123" }
+  *     responses:
+  *       200:
+  *         description: Information fetched succussfully
+  *       400:
+  *         description: Invalid request
+  */
 export async function registerUser(req: Request, res: Response): Promise<void> {
   
   try {
     // Create the user
-    const user = await UserService.createUser(req.body);
+    console.log(req.body);
+    const user = await UserService.registerUser(req.body);
     res.status(201).json({result: { user } });
   } catch (error) {
     res.status(500).json({ error: 'Internal Server Error' });
@@ -16,6 +36,28 @@ export async function registerUser(req: Request, res: Response): Promise<void> {
 }
 
 // POST /login
+
+
+/**
+ * @swagger
+  * /api/v1/users/login:
+  *   post:
+  *     tags:
+  *      - Users
+  *     summary: Authenticate user
+  *     description: Returns a JWT token upon successful login
+  *     security:
+  *       - bearerAuth: []
+  *     requestBody:
+  *       required: true
+  *       content:
+  *         application/json:
+  *           schema:
+  *             example: {  "email":"john@test.co.ke", "password": "test123" }
+  *     responses:
+  *       200:
+  *         description: Successful authentication
+  */
 export async function loginUser(req: Request, res: Response): Promise<void> {
   
     const { email, password } = req.body;
@@ -30,6 +72,32 @@ export async function loginUser(req: Request, res: Response): Promise<void> {
 }
 
 // GET /users
+
+/**
+ * @swagger
+ * /api/v1/users:
+ *   get:
+ *     tags:
+ *       - Users
+ *     summary: Retrieve a list of users
+ *     security:
+ *       - ApiKeyAuth: []
+ *     parameters:
+ *       - name: page
+ *         in: query
+ *         required: false
+ *         schema:
+ *           type: number
+ *       - name: limit
+ *         in: query
+ *         required: false
+ *         schema:
+ *           type: number
+ *     description: Retrieve a list of users from the database
+ *     responses:
+ *       200:
+ *         description: Successful response
+ */
 export async function getAllUsers(req: Request, res: Response): Promise<void> {
   // Pagination
   const page = parseInt(req.query.page as string) || 1;
@@ -61,9 +129,71 @@ export async function getAllUsers(req: Request, res: Response): Promise<void> {
   }
 }
 
-// PUT /users/:id
+// GET /users/:id
+/**
+  * @swagger
+  * /api/v1/users/{user_id}:
+  *   get:
+  *     tags:
+  *       - Users
+  *     description: Get User
+  *     operationId: getUser
+  *     summary: Get User
+  *     security:
+  *       - ApiKeyAuth: []
+  *     parameters:
+  *       - name: user_id
+  *         in: path
+  *         required: true
+  *         schema:
+  *           type: string
+  *     responses:
+  *       200:
+  *         description: Information fetched succussfuly
+  *       400:
+  *         description: Invalid request
+  */
+export async function getUserById(req: Request, res: Response): Promise<void> {
+  const userId = req.params.user_id;
+  try {
+    const user = await UserService.getUser(userId);
+    res.status(200).json({ result: { user } });
+  } catch (error) {
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+}
+
+
+// PUT /users/:user_id
+
+/** @swagger
+  * /api/v1/users/{user_id}:
+  *   put:
+  *     tags:
+  *       - Users
+  *     description: Update User
+  *     operationId: updateUser
+  *     summary: update User
+  *     parameters:
+  *       - name: user_id
+  *         in: path
+  *         required: true
+  *         schema:
+  *           type: string
+  *     requestBody:
+  *       content:
+  *         application/json:
+  *           schema:
+  *             type: object
+  *             example: { "first_name":"John", "last_name":"Doe", "email":"test@gmail.com", "password": "test123", "role": "user"}
+  *     responses:
+  *       200:
+  *         description: Information fetched succussfully
+  *       400:
+  *         description: Invalid request
+  */
 export async function updateUser(req: Request, res: Response): Promise<void> {
-  const userId = req.params.id;
+  const userId = req.params.user_id;
   
   try {
     
@@ -75,9 +205,34 @@ export async function updateUser(req: Request, res: Response): Promise<void> {
   }
 }
 
-// DELETE /users/:id
+// DELETE /users/:user_id
+
+
+/**
+  * @swagger
+  * /api/v1/users/{user_id}:
+  *   delete:
+  *     tags:
+  *       - Users
+  *     description: Delete User
+  *     operationId: deleteUser
+  *     summary: Delete user
+  *     security:
+  *       - ApiKeyAuth: []
+  *     parameters:
+  *       - name: user_id
+  *         in: path
+  *         required: true
+  *         schema:
+  *           type: string
+  *     responses:
+  *       200:
+  *         description: Information fetched succussfuly
+  *       400:
+  *         description: Invalid request
+  */
 export async function deleteUser(req: Request, res: Response): Promise<void> {
-  const userId = req.params.id;
+  const userId = req.params.user_id;
   try {
    
     const deletedUser = await UserService.deleteUser(userId);

@@ -13,6 +13,7 @@ interface UserData {
 
 class UserService {
   static async registerUser(userData: any) {
+    console.log(userData);
    
     // Hash the user's password
     const hashedPassword = await bcrypt.hash(userData.password, 10);
@@ -42,11 +43,17 @@ class UserService {
     // Generate a JWT token
     const token = jwt.sign({ userId: user.id }, 'secretKey');
 
-    return { user, token };
+    return {result: { user, token } };
   }
 
   static async getAllUsers() {
     return User.findAll();
+  }
+
+  static async getUser(userId: string) {
+
+    return User.findByPk(userId);
+
   }
 
   static async createUser(userData: any) {

@@ -2,7 +2,31 @@ import { Request, Response } from 'express';
 import Team from '../models/team';
 import TeamService from '../services/teamService';
 
-// POST /teams
+// POST /teams/create
+
+/**
+  * @swagger
+  * /api/v1/teams/create:
+  *   post:
+  *     tags:
+  *       - Teams
+  *     description:  Create a new team
+  *     operationId: createTeam
+  *     summary: 
+  *     security:
+  *       - ApiKeyAuth: []
+  *     requestBody:
+  *       content:
+  *         application/json:
+  *           schema:
+  *             type: object
+  *             example: { "name":"Team 1",  "description":"Team 1 description"}
+  *     responses:
+  *       200:
+  *         description: Information fetched succussfuly
+  *       400:
+  *         description: Invalid request
+  */
 export async function createTeam(req: Request, res: Response): Promise<void> {
   const { name, description } = req.body;
   try {
@@ -16,8 +40,32 @@ export async function createTeam(req: Request, res: Response): Promise<void> {
 }
 
 // GET /teams/:id
+
+/**
+  * @swagger
+  * /api/v1/teams/{team_id}:
+  *   get:
+  *     tags:
+  *       - Teams
+  *     description: Get Team
+  *     operationId: getTeam
+  *     summary: Get Team
+  *     security:
+  *       - ApiKeyAuth: []
+  *     parameters:
+  *       - name: team_id
+  *         in: path
+  *         required: true
+  *         schema:
+  *           type: string
+  *     responses:
+  *       200:
+  *         description: Information fetched succussfuly
+  *       400:
+  *         description: Invalid request
+  */
 export async function getTeam(req: Request, res: Response): Promise<void> {
-  const teamId = req.params.id;
+  const teamId = req.params.team_id;
   try {
     const team = await TeamService.getTeam(teamId);
     res.status(200).json({ result: { team } });
@@ -27,6 +75,32 @@ export async function getTeam(req: Request, res: Response): Promise<void> {
 }
 
 // GET /teams
+
+/**
+ * @swagger
+ * /api/v1/teams:
+ *   get:
+ *     tags:
+ *       - Teams
+ *     summary: Retrieve a list of teams
+ *     security:
+ *       - ApiKeyAuth: []
+ *     parameters:
+ *       - name: page
+ *         in: query
+ *         required: false
+ *         schema:
+ *           type: number
+ *       - name: limit
+ *         in: query
+ *         required: false
+ *         schema:
+ *           type: number
+ *     description: Retrieve a list of teams
+ *     responses:
+ *       200:
+ *         description: Successful response
+ */
 export async function getAllTeams(req: Request, res: Response): Promise<void> {
   // Pagination
   const page = parseInt(req.query.page as string) || 1;
@@ -59,6 +133,34 @@ export async function getAllTeams(req: Request, res: Response): Promise<void> {
 }
 
 // PUT /teams/:id
+
+
+/** @swagger
+  * /api/v1/teams/{team_id}:
+  *   put:
+  *     tags:
+  *       - Teams
+  *     description: Update team
+  *     operationId: updateteam
+  *     summary: update team
+  *     parameters:
+  *       - name: team_id
+  *         in: path
+  *         required: true
+  *         schema:
+  *           type: string
+  *     requestBody:
+  *       content:
+  *         application/json:
+  *           schema:
+  *             type: object
+  *             example: { "name": "Team 1", "description": "Team 1 description" }
+  *     responses:
+  *       200:
+  *         description: Information fetched succussfully
+  *       400:
+  *         description: Invalid request
+  */
 export async function updateTeam(req: Request, res: Response): Promise<void> {
   const teamId = req.params.id;
   const { name, description } = req.body;
@@ -72,6 +174,31 @@ export async function updateTeam(req: Request, res: Response): Promise<void> {
 }
 
 // DELETE /teams/:id
+
+
+/**
+  * @swagger
+  * /api/v1/teams/{team_id}:
+  *   delete:
+  *     tags:
+  *       - Teams
+  *     description: Delete team
+  *     operationId: deleteteam
+  *     summary: Delete team
+  *     security:
+  *       - ApiKeyAuth: []
+  *     parameters:
+  *       - name: team_id
+  *         in: path
+  *         required: true
+  *         schema:
+  *           type: string
+  *     responses:
+  *       200:
+  *         description: Information fetched succussfuly
+  *       400:
+  *         description: Invalid request
+  */
 export async function deleteTeam(req: Request, res: Response): Promise<void> {
   const teamId = req.params.id;
   try {

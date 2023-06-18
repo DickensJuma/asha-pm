@@ -4,7 +4,8 @@
   "description": "",
   "main": "dist/app.js",
   "scripts": {
-    "start": "node dist/app.js",
+    "start-dev": "node dist/app.js",
+   "start": "npm run build && node dist/app.js",
     "lint": "eslint . --ext .ts",
     "build": "rimraf ./dist && tsc"
   },
@@ -27,6 +28,8 @@
     "jsonwebtoken": "^9.0.0",
     "morgan": "^1.10.0",
     "pg": "^8.11.0",
-    "sequelize": "^6.32.1"
+    "sequelize": "^6.32.1",
+    "swagger-jsdoc": "^6.2.8",
+    "swagger-ui-express": "^4.6.3"
   }
 }

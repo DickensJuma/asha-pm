@@ -1,5 +1,8 @@
 import { DataTypes, Model, UUIDV4 } from 'sequelize';
 import sequelize from '../utils/database';
+import User from '../models/user';
+import Task from '../models/task';
+
 
 
 interface TeamAttributes {
@@ -32,7 +35,7 @@ Team.init(
   }
 );
 
-// Team.belongsToMany(User, { through: 'UserTeams', as: 'users', foreignKey: 'teamId' });
-// Team.belongsToMany(Task, { through: 'TeamTasks', as: 'tasks', foreignKey: 'teamId' });
+Team.belongsToMany(User, { through: 'UserTeams', as: 'users', foreignKey: 'teamId' });
+Team.belongsToMany(Task, { through: 'TeamTasks', as: 'tasks', foreignKey: 'teamId' });
 
 export default Team;

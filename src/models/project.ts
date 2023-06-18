@@ -1,6 +1,7 @@
 import { DataTypes, Model, UUIDV4 } from 'sequelize';
 import sequelize from '../utils/database';
 
+import Task from '../models/task';
 
 interface ProjectAttributes {
   id: string;
@@ -32,6 +33,7 @@ Project.init(
     },
     tasks: {
       type: DataTypes.ARRAY(DataTypes.STRING),
+
       allowNull: false,
     },
   },
@@ -40,8 +42,11 @@ Project.init(
     modelName: 'project',
   }
 );
+// Association with Task model
+Project.hasMany(Task, {
+  foreignKey: 'projectId',
+  as: 'projectTasks',
+});
 
-// Project.belongsToMany(User, { through: 'UserProjects', as: 'users', foreignKey: 'projectId' });
-// Project.belongsToMany(Task, { through: 'ProjectTasks', as: 'tasks', foreignKey: 'projectId' });
 
 export default Project;

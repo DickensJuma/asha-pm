@@ -9,9 +9,9 @@ const router= express.Router();
 
 // Task routes
 router.get('/', getAllTasks);
-router.get('/:id', getTaskById);
-router.get('/summary', getSummary);
-router.post('/create', authMiddleware, createTask);
-router.put('/:id', authMiddleware, updateTask);
+router.get('/:task_id', getTaskById);
+router.post('/create',  createTask);
+router.put('/:task_id',  updateTask);
 
+router.get('/summary/report', getSummary);
 export default router;

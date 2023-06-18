@@ -19,6 +19,7 @@ static async getTaskById(taskId: string) {
 
 
   static async createTask(taskData: any) {
+    console.log(taskData);
     return Task.create(taskData);
   }
 

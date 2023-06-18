@@ -8,7 +8,10 @@ const router = express.Router();
 
 // Project routes
 router.get('/', getAllProjects);
-router.post('/create', authMiddleware, createProject);
-router.put('/:id', authMiddleware, updateProject);
+router.get('/:project_id', getAllProjects);
+router.put('/:project_id',  updateProject);
+router.post('/create', createProject);
+router.delete('/:project_id', updateProject);
+
 
 export default router;

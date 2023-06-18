@@ -1,4 +1,5 @@
 import Project from '../models/project';
+import Task from '../models/task';
 
 interface ProjectData {
   name: string;
@@ -10,7 +11,15 @@ interface ProjectData {
 
 class ProjectService {
   static async getAllProjects(): Promise<Project[]> {
-    return Project.findAll();
+   
+    
+    return Project.findAll(
+      {
+        include: [{ model: Task, as: 'projectTasks' }],
+      }
+    );
+   
+
   }
 
   static async createProject(projectData: any): Promise<Project> {
@@ -34,7 +43,13 @@ class ProjectService {
   }
 
   static async getProjectById(projectId: number): Promise<Project | null> {
-    const project = await Project.findByPk(projectId);
+  
+    const project = await Project.findByPk(projectId, {
+      include: [{ model: Task, as: 'projectTasks' }],
+    });
+
+
+
     if (!project) {
       throw new Error('Project not found');
     }

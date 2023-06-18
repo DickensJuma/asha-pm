@@ -6,7 +6,7 @@ const router = express.Router();
 
 // Team router
 router.get('/', getAllTeams);
-router.post('/create', authMiddleware, createTeam);
-router.put('/:id', authMiddleware, updateTeam);
+router.post('/create', createTeam);
+router.put('/:team_id', updateTeam);
 
 export default router;

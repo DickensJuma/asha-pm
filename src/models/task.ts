@@ -1,6 +1,9 @@
 import { DataTypes, Model, UUIDV4 } from 'sequelize';
 import sequelize from '../utils/database';
 
+import User from '../models/user';
+import Project from '../models/project';
+
 
 interface TaskAttributes {
   id: string;
@@ -13,6 +16,7 @@ interface TaskAttributes {
   subscribers: Array<string>;
   createdAt?: Date;
   updatedAt?: Date;
+  stage: 'backlog' | 'todo' | 'in-progress' | 'done';
 }
 
 class Task extends Model<TaskAttributes> {
@@ -23,6 +27,7 @@ class Task extends Model<TaskAttributes> {
   owners: any;
   accountable: any;
   subscribers: any;
+  stage: any;
 }
 
 Task.init(
@@ -44,12 +49,17 @@ Task.init(
       type: DataTypes.ENUM('open', 'closed'),
       allowNull: false,
     },
+    stage: {
+      type: DataTypes.ENUM('backlog', 'todo', 'in-progress', 'done'),
+      allowNull: true,
+    },
+
     priority: {
       type: DataTypes.ENUM('low', 'medium', 'high'),
       allowNull: false,
     },
     owners: {
-      type: DataTypes.ARRAY(DataTypes.JSONB),
+      type: DataTypes.ARRAY(DataTypes.STRING),
       defaultValue: [],
     },
     accountable: {
