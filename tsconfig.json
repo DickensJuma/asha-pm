@@ -1,0 +1,22 @@
+{
+  "compilerOptions": {
+    "module": "commonjs",
+    "resolveJsonModule": true,
+    "esModuleInterop": true,
+    "target": "es6",
+    "noImplicitAny": false,
+    "sourceMap": false,
+    "outDir": "dist",
+    "pretty": true,
+  
+  },
+  "lib": ["es2015"],
+  "exclude": [
+    "node_modules",
+    "**/*.spec.ts",
+    "**/*.test.ts",
+    "./src/**/__tests__/*.ts"
+],
+"include": [
+    "src/**/*.ts", "app.ts"]
+}
